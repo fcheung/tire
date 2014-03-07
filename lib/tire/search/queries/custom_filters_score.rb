@@ -113,6 +113,12 @@ module Tire
           @value
         end
 
+        def max_boost(value)
+          @value[:max_boost] = value
+          @value
+        end
+
+
         def to_hash
           @value[:filters] ?
           @value :
