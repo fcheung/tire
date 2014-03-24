@@ -154,7 +154,8 @@ module Tire
       end
 
       def __find_records_by_ids(klass, ids)
-        @options[:load] === true ? klass.find(ids) : klass.find(ids, @options[:load])
+        scope = @options[:load] === true ? klass.where(ids) : klass.where(ids).includes(@options[:load])
+        scope.to_a
       end
     end
 
