@@ -104,6 +104,13 @@ module Tire
         @value
       end
 
+      def function_score(options={}, &block)
+        function_score_query = FunctionScoreQuery.new(options)
+        block.arity < 1 ? function_score_query.instance_eval(&block) : block.call(function_score_query) if block_given?
+        @value[:function_score] = function_score_query.to_hash
+        @value
+      end
+
       def to_hash
         @value
       end
@@ -271,5 +278,35 @@ module Tire
       end
     end
 
+    class FunctionScoreQuery
+      def initialize(options={})
+        @value = options.dup
+      end
+
+      def to_hash
+        @value
+      end
+
+      def filter(type, *options)
+        @value[:filter]||={}
+        @value[:filter][:and] ||= []
+        @value[:filter][:and] << Filter.new(type, *options).to_hash
+        @value
+      end
+
+      def query &block
+        @value[:query] = Query.new(&block).to_hash
+        @value
+      end
+
+      def script_score(script, lang:nil, params: {}, options:{})
+        @value[:functions]||= []
+        @value[:functions] << options.merge(:script_score => {script: script, lang:lang, params:params}.reject {|k,v| v.blank?})
+      end
+
+      def boost_factor(value, options)
+        @value[:functions] << options.merge(:boost_factor => value)
+      end
+     end
   end
 end
