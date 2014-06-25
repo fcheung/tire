@@ -305,6 +305,7 @@ module Tire
       end
 
       def boost_factor(value, options)
+        @value[:functions]||= []
         @value[:functions] << options.merge(:boost_factor => value)
       end
      end
