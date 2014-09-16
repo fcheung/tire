@@ -21,7 +21,7 @@ module Tire
       def results
         return [] if failure?
         @results ||= begin
-          hits = @response['hits']['hits'].map { |d| d.update '_type' => Utils.unescape(d['_type']) }
+          hits = @response['hits']['hits'].map { |d| d.update '_type'.freeze => Utils.unescape(d['_type'.freeze]) }
           unless @options[:load]
             __get_results_without_load(hits)
           else
@@ -109,14 +109,14 @@ module Tire
             document = {}
 
             # Update the document with fields and/or source
-            document.update h['_source'] if h['_source']
-            document.update __parse_fields__(h['fields']) if h['fields']
+            document.update h['_source'.freeze] if h['_source'.freeze]
+            document.update __parse_fields__(h['fields'.freeze]) if h['fields'.freeze]
 
             # Set document ID
-            document['id'] = h['_id']
+            document['id'.freeze] = h['_id'.freeze]
 
             # Update the document with meta information
-            ['_score', '_type', '_index', '_version', 'sort', 'highlight', '_explanation'].each do |key|
+            ['_score'.freeze, '_type'.freeze, '_index'.freeze, '_version'.freeze, 'sort'.freeze, 'highlight'.freeze, '_explanation'.freeze].each do |key|
               document.update key => h[key]
             end
 
@@ -148,8 +148,8 @@ module Tire
 
         # Reorder records to preserve the order from search results
         @response['hits']['hits'].map do |item|
-          records[item['_type']].detect do |record|
-            record.id.to_s == item['_id'].to_s
+          records[item['_type'.freeze]].detect do |record|
+            record.id.to_s == item['_id'.freeze].to_s
           end
         end
       end
