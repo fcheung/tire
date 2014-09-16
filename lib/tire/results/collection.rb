@@ -82,23 +82,24 @@ module Tire
       #
       def __parse_fields__(fields={})
         ( fields ||= {} ).clone.each_pair do |key,value|
-          next unless key.to_s =~ /_source/                 # Skip regular JSON immediately
+          next unless key.start_with?('_source'.freeze)                 # Skip regular JSON immediately
+          keys = key.split('.')
+          keys.shift
 
-          keys = key.to_s.split('.').reject { |n| n == '_source' }
           fields.delete(key)
 
           result = {}
-          path = []
-
+          stack = result
+          *keys, last_key = keys
           keys.each do |name|
-            path << name
-            eval "result[:#{path.join('][:')}] ||= {}"
-            eval "result[:#{path.join('][:')}] = #{value.inspect}" if keys.last == name
+            stack = (stack[name] ||= {})
           end
+          stack[last_key] = value
           fields.update result
         end
         fields
       end
+
 
       def __get_results_without_load(hits)
         if @wrapper == Hash
