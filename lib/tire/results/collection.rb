@@ -110,8 +110,14 @@ module Tire
 
             # Update the document with fields and/or source
             document.update h['_source'.freeze] if h['_source'.freeze]
-            document.update __parse_fields__(h['fields'.freeze]) if h['fields'.freeze]
-
+            fields = h['fields'.freeze]
+            if fields
+              if partial = fields['_tire_partial'.freeze]
+                document.update __parse_fields__(partial)
+              else
+                document.update __parse_fields__(fields)
+              end
+            end
             # Set document ID
             document['id'.freeze] = h['_id'.freeze]
 

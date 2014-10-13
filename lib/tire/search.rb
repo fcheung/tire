@@ -63,6 +63,14 @@ module Tire
         self
       end
 
+      def source(string_or_array=nil,&block)
+        if string_or_array
+          @source = string_or_array
+        else
+          @source = Source.new(&block).to_hash
+        end
+      end
+
       def facet(name, options={}, &block)
         @facets ||= {}
         @facets.update Facet.new(name, options, &block).to_hash
@@ -113,9 +121,14 @@ module Tire
         self
       end
 
-      def partial_field(name, options)
-        @partial_fields ||= {}
-        @partial_fields[name] = options
+      def partial_field(string_or_array=nil,&block)
+        if string_or_array
+          @partial_fields = PartialField.new do
+            include *string_or_array
+          end.to_hash
+        else
+          @partial_fields = PartialField.new(&block).to_hash
+        end
       end
 
       def explain(value)
@@ -170,6 +183,7 @@ module Tire
           request.update( { :size => @size } )               if @size
           request.update( { :from => @from } )               if @from
           request.update( { :fields => @fields } )           if @fields
+          request.update( { :_source => @source } )           if @source
           request.update( { :partial_fields => @partial_fields } ) if @partial_fields
           request.update( { :script_fields => @script_fields } ) if @script_fields
           request.update( { :version => @version } )         if @version
