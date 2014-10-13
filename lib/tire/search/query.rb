@@ -288,6 +288,7 @@ module Tire
       end
 
       def filter(type, *options)
+        check_for_presence_of :query
         @value[:filter]||={}
         @value[:filter][:and] ||= []
         @value[:filter][:and] << Filter.new(type, *options).to_hash
@@ -295,6 +296,7 @@ module Tire
       end
 
       def query &block
+        check_for_presence_of :filter
         @value[:query] = Query.new(&block).to_hash
         @value
       end
@@ -308,6 +310,18 @@ module Tire
         @value[:functions]||= []
         @value[:functions] << options.merge(:boost_factor => value)
       end
-     end
+
+      protected
+
+      def check_for_presence_of key
+        if @value[key]
+          if Rails.env.production?
+            puts "Function score query does not support query and filter #{caller.join(';')}"
+          else
+            raise "Function score query does not support query and filter #{caller.join(';')}"
+          end
+        end
+      end
+    end
   end
 end
