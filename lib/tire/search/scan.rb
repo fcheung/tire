@@ -77,6 +77,13 @@ module Tire
         end
       end
 
+      def each_document_with_hit
+        until results.empty?
+          results.each_with_hit.each { |item, hit| yield item, hit }
+          __perform
+        end
+      end
+
       def size
         results.size
       end
