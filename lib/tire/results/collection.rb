@@ -115,6 +115,8 @@ module Tire
             fields = h['fields'.freeze]
             if fields
               if partial = fields[_tire_partial]
+                #ES 1.0 returns an array of hashes here
+                partial = partial.first if partial.is_a?(Array)
                 document.update __parse_fields__(partial)
                 other = fields.except(_tire_partial)
                 document.update(__parse_fields__(other)) if other.any?
