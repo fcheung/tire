@@ -105,15 +105,19 @@ module Tire
         if @wrapper == Hash
           hits
         else
+          _tire_partial = '_tire_partial'.freeze
+          _source = '_source'.freeze
           hits.map do |h|
             document = {}
 
             # Update the document with fields and/or source
-            document.update h['_source'.freeze] if h['_source'.freeze]
+            document.update h[_source] if h[_source]
             fields = h['fields'.freeze]
             if fields
-              if partial = fields['_tire_partial'.freeze]
+              if partial = fields[_tire_partial]
                 document.update __parse_fields__(partial)
+                other = fields.except(_tire_partial)
+                document.update(__parse_fields__(other)) if other.any?
               else
                 document.update __parse_fields__(fields)
               end
