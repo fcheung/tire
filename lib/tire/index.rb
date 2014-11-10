@@ -206,6 +206,9 @@ module Tire
           # Normalize Ruby 1.8 and Ruby 1.9 Hash#select behaviour
           meta = Hash[meta] unless meta.is_a?(Hash)
 
+          meta.each do |k, _|
+            doc_hash.delete k #don't leave them hanging around in the document
+          end
           # meta = SUPPORTED_META_PARAMS_FOR_BULK.inject({}) { |hash, param|
           #   value = doc_hash.delete(param)
           #   hash[param] = value unless !value || value.empty?
