@@ -176,8 +176,8 @@ module Tire
           request.update( { :query  => @query.to_hash } )    if @query
           request.update( { :sort   => @sort.to_ary   } )    if @sort
           request.update( { :facets => @facets.to_hash } )   if @facets
-          request.update( { :filter => @filters.first.to_hash } ) if @filters && @filters.size == 1
-          request.update( { :filter => { :and => @filters.map {|filter| filter.to_hash} } } ) if  @filters && @filters.size > 1
+          request.update( { :post_filter => @filters.first.to_hash } ) if @filters && @filters.size == 1
+          request.update( { :post_filter => { :and => @filters.map {|filter| filter.to_hash} } } ) if  @filters && @filters.size > 1
           request.update( { :highlight => @highlight.to_hash } ) if @highlight
           request.update( { :suggest => @suggest.to_hash } ) if @suggest
           request.update( { :size => @size } )               if @size
