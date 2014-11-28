@@ -92,7 +92,7 @@ module Tire
         params[:ignore_conflicts] = ignore_conflicts
       end
 
-      url  = "#{self.url}/#{type}/_mapping"
+      url  = "#{self.url}/_mapping/#{type}"
       url << "?#{params.to_param}" unless params.empty?
 
       payload = { type => mapping }.to_json
@@ -106,7 +106,7 @@ module Tire
     end
 
     def delete_mapping(type)
-      url = "#{self.url}/#{type}"
+      url = "#{self.url}/_mapping/#{type}"
       @response = Configuration.client.delete(url)
       @response.success?
     ensure
