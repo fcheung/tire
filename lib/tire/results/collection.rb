@@ -5,7 +5,7 @@ module Tire
       include Enumerable
       include Pagination
 
-      attr_reader :time, :total, :options, :facets, :max_score, :suggestions
+      attr_reader :time, :total, :options, :facets, :max_score, :suggestions, :aggregations
 
       def initialize(response, options={})
         @response    = response
@@ -13,6 +13,7 @@ module Tire
         @time        = response['took'].to_i
         @total       = response['hits']['total'].to_i rescue nil
         @facets      = response['facets']
+        @aggregations= response['aggregations'] 
         @suggestions = Suggestions.new(response['suggest']) if response['suggest']
         @max_score   = response['hits']['max_score'].to_f rescue nil
         @wrapper     = options[:wrapper] || Configuration.wrapper
