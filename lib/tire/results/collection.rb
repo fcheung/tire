@@ -106,7 +106,6 @@ module Tire
         if @wrapper == Hash
           hits
         else
-          _tire_partial = '_tire_partial'.freeze
           _source = '_source'.freeze
           hits.map do |h|
             document = {}
@@ -115,15 +114,7 @@ module Tire
             document.update h[_source] if h[_source]
             fields = h['fields'.freeze]
             if fields
-              if partial = fields[_tire_partial]
-                #ES 1.0 returns an array of hashes here
-                partial = partial.first if partial.is_a?(Array)
-                document.update __parse_fields__(partial)
-                other = fields.except(_tire_partial)
-                document.update(__parse_fields__(other)) if other.any?
-              else
-                document.update __parse_fields__(fields)
-              end
+              document.update __parse_fields__(fields)
             end
             # Set document ID
             document['id'.freeze] = h['_id'.freeze]
