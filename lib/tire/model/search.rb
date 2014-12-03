@@ -100,6 +100,7 @@ module Tire
             # TODO: Actualy, allow passing all the valid options from
             # <http://www.elasticsearch.org/guide/reference/api/search/uri-request.html>
             s.fields Array(options[:fields]) if options[:fields]
+            s.source options[:source] if options.has_key?(:source)
           end
 
           s.results
