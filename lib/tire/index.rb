@@ -34,7 +34,7 @@ module Tire
 
     def create(options={})
       @options = options
-      @response = Configuration.client.post url, MultiJson.encode(options)
+      @response = Configuration.client.put url, MultiJson.encode(options)
       @response.success? ? @response : false
 
     ensure
