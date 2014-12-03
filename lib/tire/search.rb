@@ -64,7 +64,7 @@ module Tire
       end
 
       def source(string_or_array=nil,&block)
-        if string_or_array
+        if string_or_array != nil #false is a legitimate value
           @source = string_or_array
         else
           @source = Source.new(&block).to_hash
@@ -190,7 +190,7 @@ module Tire
           request.update( { :size => @size } )               if @size
           request.update( { :from => @from } )               if @from
           request.update( { :fields => @fields } )           if @fields
-          request.update( { :_source => @source } )           if @source
+          request.update( { :_source => @source } )           if defined?(@source)
           request.update( { :partial_fields => @partial_fields } ) if @partial_fields
           request.update( { :script_fields => @script_fields } ) if @script_fields
           request.update( { :version => @version } )         if @version
