@@ -43,6 +43,7 @@ module Tire
       end
 
       def custom_score(options={}, &block)
+        raise "custom score query has been removed"
         @custom_score ||= Query.new(&block)
         @value[:custom_score] = options
         @value[:custom_score].update({:query => @custom_score.to_hash})
