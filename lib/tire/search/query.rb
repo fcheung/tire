@@ -316,11 +316,7 @@ module Tire
 
       def check_for_presence_of key
         if @value[key]
-          if ::Rails.env.production?
-            ::Rails.logger.info "Function score query does not support query and filter #{caller.join(';')}"
-          else
-            raise "Function score query does not support query and filter #{caller.join(';')}"
-          end
+          raise "Function score query does not support query and filter #{caller.join(';')}"
         end
       end
     end
