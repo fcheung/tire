@@ -312,9 +312,9 @@ module Tire
         @value[:functions] << options.merge(:weight => value)
       end
 
-      def field_value_factor(field, options={})
+      def field_value_factor(field, function_options:{}, field_options:{})
         @value[:functions]||=[]
-        @value[:functions] << {field_value_factor: {field: field}.merge(options)}
+        @value[:functions] << {field_value_factor: {field: field}.merge(field_options)}.merge(function_options)
       end
 
       protected
