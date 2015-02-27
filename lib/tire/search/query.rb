@@ -312,11 +312,11 @@ module Tire
         @value[:functions] << options.merge(:weight => value)
       end
 
-      def field_data_factor(field, options={})
+      def field_value_factor(field, options={})
         @value[:functions]||=[]
-        @value[:functions] << {field_data_factor: {field: field}.merge(options)}
+        @value[:functions] << {field_value_factor: {field: field}.merge(options)}
       end
-      
+
       protected
 
       def check_for_presence_of key
