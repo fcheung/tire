@@ -209,6 +209,7 @@ module Tire
           meta.each do |k, _|
             doc_hash.delete k #don't leave them hanging around in the document
           end
+          doc_hash.delete :_type
           # meta = SUPPORTED_META_PARAMS_FOR_BULK.inject({}) { |hash, param|
           #   value = doc_hash.delete(param)
           #   hash[param] = value unless !value || value.empty?
