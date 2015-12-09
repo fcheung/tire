@@ -356,6 +356,8 @@ module Tire
       params    = {}
       params[:routing]    = options[:routing] if options[:routing]
       params[:fields]     = options[:fields]  if options[:fields]
+      params[:_source_exclude]     = options[:source_exclude]  if options[:source_exclude]
+      params[:_source_include]     = options[:source_include]  if options[:_ource_include]
       params[:preference] = options[:preference] if options[:preference]
       params_encoded      = params.empty? ? '' : "?#{params.to_param}"
 
