@@ -374,6 +374,7 @@ module Tire
       else
         document = h['_source'] || h['fields'] || {}
         document.update('id' => h['_id'], '_type' => h['_type'], '_index' => h['_index'], '_version' => h['_version'])
+        document['_parent'] = h['_parent'] if h['_parent'] #ES 2 returns meta data at the top level, not inside fields / _source 
         wrapper.new(document)
       end
 
