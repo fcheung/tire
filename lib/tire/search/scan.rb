@@ -42,7 +42,7 @@ module Tire
     class Scan
       include Enumerable
 
-      attr_reader :indices, :options, :search
+      attr_reader :indices, :options, :search, :scroll_id
 
       def initialize(indices=nil, options={}, &block)
         @indices = Array(indices)
@@ -59,9 +59,6 @@ module Tire
       def total;              @total    || (__perform; @total);                                end
       def seen;               @seen     || (__perform; @seen);                                 end
 
-      def scroll_id
-        @scroll_id ||= @search.perform.json['_scroll_id']
-      end
 
       def each
         until results.empty?
@@ -89,8 +86,14 @@ module Tire
       end
 
       def __perform
-        @response  = Configuration.client.get [url, params].join, scroll_id
-        @json      = MultiJson.decode @response.body
+        if scroll_id
+          @response  = Configuration.client.get [url, params].join, scroll_id
+          @json      = MultiJson.decode @response.body
+        else
+          @json = @search.json
+          @response = @search.response
+        end
+
         @results   = Results::Collection.new @json, @options
         @total     = @json['hits']['total'].to_i
         @seen     += @results.size
