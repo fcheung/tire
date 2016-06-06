@@ -148,7 +148,7 @@ module Tire
       end
 
       def must_not(&block)
-        (@value[:must_not] ||= []) << Query.new(&block).to_hash
+        (@value[:must_not] ||= []) << Filter.new(type, *options).to_hash
         @value
       end
 
