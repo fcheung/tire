@@ -295,10 +295,14 @@ module Tire
 
       def filter(type, *options)
         check_for_presence_of :query
-        @value[:filter]||={}
-        @value[:filter][:and] ||= []
-        @value[:filter][:and] << Filter.new(type, *options).to_hash
+        ensure_filter
+        @value[:filter][:bool][:filter] << Filter.new(type, *options).to_hash
         @value
+      end
+
+      def must_not(type, *options)
+        ensure_filter
+        @value[:filter][:bool][:must_not] << Filter.new(type, *options).to_hash
       end
 
       def query &block
@@ -323,6 +327,10 @@ module Tire
       end
 
       protected
+
+      def ensure_filter
+        @value[:filter] ||= {bool: {filter: [], must_not: []}}
+      end
 
       def check_for_presence_of key
         if @value[key]
