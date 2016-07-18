@@ -316,7 +316,7 @@ module Tire
 
       def script_score(script, lang:nil, params: {}, options:{})
         @value[:functions]||= []
-        @value[:functions] << options.merge(:script_score => {script: script, lang:lang, params:params}.reject {|k,v| v.blank?})
+        @value[:functions] << options.merge(:script_score => {script: {inline: script, lang:lang, params:params}}.reject {|k,v| v.blank?})
       end
 
       def boost_factor(value, options)
