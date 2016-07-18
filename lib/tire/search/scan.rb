@@ -94,6 +94,10 @@ module Tire
           @response = @search.response
         end
 
+        if @response.code != 200
+          raise Tire::Search::SearchRequestFailed, @response.to_s
+        end
+
         @results   = Results::Collection.new @json, @options
         @total     = @json['hits']['total'].to_i
         @seen     += @results.size
