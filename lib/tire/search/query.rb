@@ -290,7 +290,9 @@ module Tire
       end
 
       def to_hash
-        @value[:filter][:bool].delete(:must_not) if @value[:filter][:bool][:must_not].empty?
+        if @value[:filter] &&  @value[:filter][:bool][:must_not].empty?
+          @value[:filter][:bool].delete(:must_not) 
+        end
         @value
       end
 
