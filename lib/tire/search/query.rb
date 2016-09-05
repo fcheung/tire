@@ -328,13 +328,13 @@ module Tire
       protected
 
       def ensure_filter
-        @value[:query] ||= {bool: {must: {match_all: {}}}}
+        @value[:query] ||= {bool: {}}
         raise "query is not a bool query" if @value[:query][:bool].nil?
         @value[:query][:bool][:filter]||=[]
       end
 
       def ensure_must_not
-        @value[:query] ||= {bool: {must: {match_all: {}}}}
+        @value[:query] ||= {bool: {}}
         raise "query is not a bool query" if @value[:query][:bool].nil?
         @value[:query][:bool][:must_not]||=[]
       end
