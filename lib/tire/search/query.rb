@@ -290,9 +290,6 @@ module Tire
       end
 
       def to_hash
-        if @value[:filter] &&  @value[:filter][:bool][:must_not].empty?
-          @value[:filter][:bool].delete(:must_not) 
-        end
         @value
       end
 
@@ -303,7 +300,7 @@ module Tire
       end
 
       def must_not(type, *options)
-        ensure_filter
+        ensure_must_not
         @value[:query][:bool][:must_not] << Filter.new(type, *options).to_hash
       end
 
@@ -331,8 +328,15 @@ module Tire
       protected
 
       def ensure_filter
-        @value[:query] ||= {bool: {filter: [], must_not: []}}
+        @value[:query] ||= {bool: {}}
         raise "query is not a bool query" if @value[:query][:bool].nil?
+        @value[:query][:bool][:filter]||=[]
+      end
+
+      def ensure_must_not
+        @value[:query] ||= {bool: {}}
+        raise "query is not a bool query" if @value[:query][:bool].nil?
+        @value[:query][:bool][:must_not]||=[]
       end
 
       def check_for_presence_of key
