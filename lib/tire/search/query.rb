@@ -297,19 +297,18 @@ module Tire
       end
 
       def filter(type, *options)
-        check_for_presence_of :query
         ensure_filter
-        @value[:filter][:bool][:filter] << Filter.new(type, *options).to_hash
+        @value[:query][:bool][:filter] << Filter.new(type, *options).to_hash
         @value
       end
 
       def must_not(type, *options)
         ensure_filter
-        @value[:filter][:bool][:must_not] << Filter.new(type, *options).to_hash
+        @value[:query][:bool][:must_not] << Filter.new(type, *options).to_hash
       end
 
       def query &block
-        check_for_presence_of :filter
+        check_for_presence_of :query
         @value[:query] = Query.new(&block).to_hash
         @value
       end
@@ -332,7 +331,8 @@ module Tire
       protected
 
       def ensure_filter
-        @value[:filter] ||= {bool: {filter: [], must_not: []}}
+        @value[:query] ||= {bool: {filter: [], must_not: []}}
+        raise "query is not a bool query" if @value[:query][:bool].nil?
       end
 
       def check_for_presence_of key
