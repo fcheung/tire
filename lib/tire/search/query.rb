@@ -147,7 +147,7 @@ module Tire
         @value
       end
 
-      def must_not(&block)
+      def must_not(type, *options)
         (@value[:must_not] ||= []) << Filter.new(type, *options).to_hash
         @value
       end
