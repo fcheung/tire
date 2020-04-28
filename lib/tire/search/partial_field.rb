@@ -10,11 +10,11 @@ module Tire
 
 
       def include(*values)
-        @value['include']= values
+        @value['includes']= values
       end
 
       def exclude(*values)
-        @value['exclude']= values
+        @value['excludes']= values
       end
 
       def to_hash
